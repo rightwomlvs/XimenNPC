@@ -121,20 +121,18 @@
     flex-direction:row;
     align-items:flex-end;
     justify-content:center;
-    gap:clamp(10px,3vw,26px);
+    gap:0;
   }
   .npc-img{
     flex:none;
     width:clamp(110px,24vw,190px);
     height:auto;
-    border-radius:10px;
-    box-shadow:0 10px 28px rgba(0,0,0,0.5), 0 0 0 1px var(--line);
     object-fit:contain;
+    margin-left:clamp(-30px,-5vw,-14px);
   }
 
   @media (max-width:640px){
-    .jar-scene{gap:8px;}
-    .npc-img{width:clamp(96px,30vw,150px);}
+    .npc-img{width:clamp(96px,30vw,150px); margin-left:clamp(-20px,-6vw,-8px);}
   }
 
   /* ---------- jar ---------- */
@@ -463,7 +461,6 @@
     </div>
 
     <div class="jar-scene">
-      <img class="npc-img" src="https://raw.githubusercontent.com/rightwomlvs/XimenNPC/main/npc.png" alt="茶樓掌櫃">
       <div class="jar-wrap">
         <div class="jar-glow"></div>
         <svg class="jar" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
@@ -484,6 +481,7 @@
           <ellipse cx="100" cy="63" rx="40" ry="8" fill="#000" opacity="0.25"/>
         </svg>
       </div>
+      <img class="npc-img" src="https://raw.githubusercontent.com/rightwomlvs/XimenNPC/main/npc.png" alt="茶樓掌櫃">
     </div>
 
     <div class="seal-text" id="sealText">✧ 數位封印　已解除 ✧</div>
@@ -506,7 +504,7 @@
       </div>
       <div class="qr-caption">你的已知碎片已沉入甕底。<br>掃描 <span class="k">QRCode</span>，完成身份登出程序。</div>
       <button class="complete-btn" id="completeBtn">我已掃描完成</button>
-      <div class="equip-msg">身份已登出，沙盒通道全開。<br>請至報到處，領取你的探索裝備。</div>
+      <div class="equip-msg">身份已登出，沙盒通道全開。<br>請向NPC領取你的探索裝備。</div>
     </div>
   </main>
 
