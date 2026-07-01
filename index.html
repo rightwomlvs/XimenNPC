@@ -86,7 +86,7 @@
     text-shadow: 0 0 22px rgba(217,138,61,0.35), 0 0 2px rgba(0,0,0,0.6);
     line-height:1.2;
   }
-  .title .accent{color:var(--jar-amber-soft);}
+  .title .accent{color:#f29844; text-shadow:0 0 14px rgba(242,152,68,0.55);}
 
   main{
     flex:1;
@@ -146,11 +146,15 @@
   }
   .jar-glow{
     position:absolute; inset:-30%;
-    background:radial-gradient(circle, rgba(217,138,61,0.35), transparent 65%);
+    background:
+      radial-gradient(circle at 35% 40%, rgba(242,152,68,0.4), transparent 60%),
+      radial-gradient(circle at 65% 60%, rgba(95,224,230,0.22), transparent 65%);
     filter:blur(6px);
     opacity:0.6;
     animation:pulse 3.4s ease-in-out infinite;
   }
+  .jar-body{ filter: drop-shadow(0 0 8px rgba(242,152,68,0.55)); }
+  .jar-rim{ filter: drop-shadow(0 0 6px rgba(95,224,230,0.65)); }
   @keyframes pulse{
     0%,100%{transform:scale(1); opacity:0.5;}
     50%{transform:scale(1.12); opacity:0.85;}
@@ -371,8 +375,8 @@
     transition:all .3s ease;
     flex:none;
   }
-  .step.active{color:var(--jar-amber-soft);}
-  .step.active .dot{background:var(--jar-amber-soft); box-shadow:0 0 10px var(--jar-amber-soft);}
+  .step.active{color:#f29844;}
+  .step.active .dot{background:#f29844; box-shadow:0 0 10px #f29844;}
   .step.done{color:var(--spirit-cyan);}
   .step.done .dot{background:var(--spirit-cyan); box-shadow:0 0 8px var(--spirit-cyan);}
   .arrow{color:var(--line); font-size:.85rem;}
@@ -468,13 +472,15 @@
           <path d="M70 60 L66 55 L66 30 Q66 20 76 20 L124 20 Q134 20 134 30 L134 55 L130 60 Z"
                 fill="#5a3a1c" stroke="#3a2410" stroke-width="2"/>
           <rect x="74" y="18" width="52" height="10" rx="4" fill="#3a2410"/>
-          <path d="M60 62 Q40 90 42 130 Q44 185 100 195 Q156 185 158 130 Q160 90 140 62 Z"
-                fill="url(#jarGrad)" stroke="#8a5a20" stroke-width="3"/>
+          <path class="jar-body" d="M60 62 Q40 90 42 130 Q44 185 100 195 Q156 185 158 130 Q160 90 140 62 Z"
+                fill="url(#jarGrad)" stroke="#f29844" stroke-width="3"/>
+          <path class="jar-rim" d="M60 62 Q40 90 42 130 Q44 185 100 195 Q156 185 158 130 Q160 90 140 62 Z"
+                fill="none" stroke="var(--spirit-cyan)" stroke-width="1.4" opacity="0.55"/>
           <defs>
             <linearGradient id="jarGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#3a2b12" stop-opacity="0.55"/>
-              <stop offset="55%" stop-color="#7a4d1c" stop-opacity="0.55"/>
-              <stop offset="100%" stop-color="#f0b168" stop-opacity="0.65"/>
+              <stop offset="0%" stop-color="#2b1c0f" stop-opacity="0.6"/>
+              <stop offset="50%" stop-color="#b35f1e" stop-opacity="0.6"/>
+              <stop offset="100%" stop-color="#f29844" stop-opacity="0.72"/>
             </linearGradient>
           </defs>
           <path class="jar-seal-crack" d="M75 90 L95 100 L85 115 L110 125 L95 145 L120 150"/>
@@ -504,7 +510,7 @@
       </div>
       <div class="qr-caption">你的已知碎片已沉入甕底。<br>掃描 <span class="k">QRCode</span>，完成身份登出程序。</div>
       <button class="complete-btn" id="completeBtn">我已掃描完成</button>
-      <div class="equip-msg">身份已登出，沙盒通道全開。<br>請向NPC領取你的探索裝備。</div>
+      <div class="equip-msg">身份已登出，沙盒通道全開。<br>請至報到處，領取你的探索裝備。</div>
     </div>
   </main>
 
