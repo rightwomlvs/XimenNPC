@@ -468,13 +468,17 @@
       <div class="jar-wrap">
         <div class="jar-glow"></div>
         <svg class="jar" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="100" cy="205" rx="58" ry="10" fill="rgba(0,0,0,0.35)"/>
-          <path d="M70 60 L66 55 L66 30 Q66 20 76 20 L124 20 Q134 20 134 30 L134 55 L130 60 Z"
-                fill="#5a3a1c" stroke="#3a2410" stroke-width="2"/>
-          <rect x="74" y="18" width="52" height="10" rx="4" fill="#3a2410"/>
-          <path class="jar-body" d="M60 62 Q40 90 42 130 Q44 185 100 195 Q156 185 158 130 Q160 90 140 62 Z"
+          <ellipse cx="100" cy="208" rx="55" ry="9" fill="rgba(0,0,0,0.35)"/>
+
+          <rect x="78" y="198" width="44" height="10" rx="3" fill="#241505"/>
+          <rect x="92" y="128" width="16" height="76" rx="2" fill="#3a2410" stroke="#241505" stroke-width="2"/>
+
+          <line x1="150" y1="118" x2="172" y2="98" stroke="#8a5a20" stroke-width="4" stroke-linecap="round"/>
+          <path class="jar-rim" d="M172 98 L190 105 L172 116 Z" fill="#f29844" stroke="var(--spirit-cyan)" stroke-width="1.2"/>
+
+          <path class="jar-body" d="M50 130 L50 85 A50 45 0 0 1 150 85 L150 130 Z"
                 fill="url(#jarGrad)" stroke="#f29844" stroke-width="3"/>
-          <path class="jar-rim" d="M60 62 Q40 90 42 130 Q44 185 100 195 Q156 185 158 130 Q160 90 140 62 Z"
+          <path class="jar-rim" d="M50 130 L50 85 A50 45 0 0 1 150 85 L150 130 Z"
                 fill="none" stroke="var(--spirit-cyan)" stroke-width="1.4" opacity="0.55"/>
           <defs>
             <linearGradient id="jarGrad" x1="0" y1="0" x2="0" y2="1">
@@ -483,8 +487,9 @@
               <stop offset="100%" stop-color="#f29844" stop-opacity="0.72"/>
             </linearGradient>
           </defs>
-          <path class="jar-seal-crack" d="M75 90 L95 100 L85 115 L110 125 L95 145 L120 150"/>
-          <ellipse cx="100" cy="63" rx="40" ry="8" fill="#000" opacity="0.25"/>
+          <rect x="80" y="96" width="40" height="9" rx="3" fill="#1c1207" stroke="#000" stroke-width="1" opacity="0.85"/>
+          <path class="jar-seal-crack" d="M76 100 L92 104 L102 97 L112 104 L124 100"/>
+          <ellipse cx="100" cy="88" rx="45" ry="5" fill="#000" opacity="0.2"/>
         </svg>
       </div>
       <img class="npc-img" src="https://raw.githubusercontent.com/rightwomlvs/XimenNPC/main/npc.png" alt="茶樓掌櫃">
@@ -499,18 +504,18 @@
           <div class="rule"></div>
           <div class="rule"></div>
         </div>
-        <div class="paper-hint">在紙條上寫下你的已知碎片，準備好後投入甕中</div>
+        <div class="paper-hint">在紙條上寫下你的已知碎片，準備好後投入信箱</div>
       </div>
-      <button class="drop-btn" id="dropBtn">投入甕中，交出已知</button>
+      <button class="drop-btn" id="dropBtn">投入信箱，交出已知</button>
     </div>
 
     <div class="qr-zone" id="qrZone">
       <div class="qr-card">
         <img src="https://drive.google.com/thumbnail?id=1teLIaFWdf9A3iRK_7j2ev9zYUwEncRZs&sz=w1000" alt="登入 QRCode">
       </div>
-      <div class="qr-caption">你的已知碎片已沉入甕底<br>掃描 <span class="k">QRCode</span>，完成身份登出程序</div>
+      <div class="qr-caption">你的已知碎片已寄入信箱深處。<br>掃描 <span class="k">QRCode</span>，完成身份登出程序。</div>
       <button class="complete-btn" id="completeBtn">我已掃描完成</button>
-      <div class="equip-msg">身份已登出，沙盒通道全開<br>請向NPC領取你的探索裝備</div>
+      <div class="equip-msg">身份已登出，沙盒通道全開。<br>請至報到處，領取你的探索裝備。</div>
     </div>
   </main>
 
@@ -532,7 +537,7 @@
 </button>
 
 <script>
-  const fullText = "我是這裡的甕靈守門人。歡迎來到西門沙盒。\n請交出你從外面的世界(學校／辦公室……）帶來的既定觀念、\n或是平常在教育與家庭中最沉重的標籤(身份負擔），\n把它寫在這張『已知碎片』上，投入甕中——\n你體內的數位封印便會解除，正式登出日常身份！";
+  const fullText = "我是這裡的信差守門人。歡迎來到西門沙盒。\n請交出你從外面的世界（學校／辦公室……）帶來的既定觀念、\n或平常生活中最沉重的標籤（身份負擔），\n把它寫在這張『已知碎片』上，投入信箱——\n你體內的數位封印便會解除，登出日常身份，\n正式登入遊戲！";
 
   const zhEl = document.getElementById('textZh');
   function typewriter(el, text, speed){
