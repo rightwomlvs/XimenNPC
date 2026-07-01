@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>2026 貍想教育節｜首次登入</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0b0d10;
+    --ink-2:#12151a;
+    --jar-amber:#d98a3d;
+    --jar-amber-soft:#f0b168;
+    --ember:#ff5a4d;
+    --spirit-cyan:#5fe0e6;
+    --paper:#f3e9d2;
+    --paper-shadow:#c9b98a;
+    --muted:#9aa0a6;
+    --line:rgba(217,138,61,0.25);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    min-height:100dvh;
+    background:
+      radial-gradient(ellipse 120% 80% at 50% -10%, #1c1712 0%, var(--ink) 55%),
+      var(--ink);
+    color:#eee6d6;
+    font-family:'Noto Sans TC','Microsoft JhengHei',sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* ambient floating embers */
+  .ember-field{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+  .ember{
+    position:absolute; bottom:-5%; border-radius:50%;
+    background:radial-gradient(circle, var(--jar-amber-soft), transparent 70%);
+    opacity:0.55; filter:blur(0.5px);
+    animation:rise linear infinite;
+  }
+  @keyframes rise{
+    0%{transform:translateY(0) translateX(0); opacity:0;}
+    10%{opacity:0.6;}
+    90%{opacity:0.4;}
+    100%{transform:translateY(-115vh) translateX(var(--drift,20px)); opacity:0;}
+  }
+
+  #stage{
+    width:100%;
+    max-width:960px;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    min-height:100dvh;
+    padding: clamp(14px,3vw,28px) clamp(14px,4vw,32px) 0;
+    position:relative;
+    z-index:1;
+  }
+
+  header.top{
+    text-align:center;
+    padding: clamp(10px,2vh,22px) 0 clamp(14px,2.5vh,26px);
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:'Zhi Mang Xing',cursive;
+    color:var(--spirit-cyan);
+    font-size:clamp(1rem,2.4vw,1.35rem);
+    letter-spacing:.15em;
+    text-shadow:0 0 12px rgba(95,224,230,0.45);
+  }
+  h1.title{
+    margin:.15em 0 0;
+    font-family:'Noto Serif TC',serif;
+    font-weight:900;
+    font-size:clamp(1.7rem,5.4vw,3.1rem);
+    letter-spacing:.04em;
+    color:#f6ecd6;
+    text-shadow: 0 0 22px rgba(217,138,61,0.35), 0 0 2px rgba(0,0,0,0.6);
+    line-height:1.2;
+  }
+  .title .accent{color:var(--jar-amber-soft);}
+
+  main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    gap:clamp(10px,2.5vh,22px);
+    padding: clamp(14px,3vh,28px) 0 clamp(90px,12vh,120px);
+  }
+
+  /* ---------- narration ---------- */
+  .narration{
+    width:100%;
+    text-align:center;
+    max-width:680px;
+  }
+  .story-zh{
+    font-size:clamp(1rem,2.6vw,1.28rem);
+    line-height:1.85;
+    color:#e9ddc0;
+    min-height:6.5em;
+    white-space:pre-wrap;
+  }
+  .story-zh .k{color:var(--jar-amber-soft); font-weight:700;}
+
+  /* ---------- jar ---------- */
+  .jar-wrap{
+    position:relative;
+    width:clamp(150px,32vw,220px);
+    aspect-ratio:1/1;
+    margin:0 auto;
+    display:flex;align-items:center;justify-content:center;
+    flex:none;
+  }
+  .jar-glow{
+    position:absolute; inset:-30%;
+    background:radial-gradient(circle, rgba(217,138,61,0.35), transparent 65%);
+    filter:blur(6px);
+    opacity:0.6;
+    animation:pulse 3.4s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{transform:scale(1); opacity:0.5;}
+    50%{transform:scale(1.12); opacity:0.85;}
+  }
+  svg.jar{position:relative; width:100%; height:100%; overflow:visible;}
+  .jar-seal-crack{
+    stroke:var(--ember); stroke-width:2; fill:none; opacity:0;
+    stroke-dasharray: 60; stroke-dashoffset:60;
+  }
+
+  body[data-state="submitted"] .jar-glow,
+  body[data-state="step3"] .jar-glow{ animation-duration:1s; opacity:0.95;}
+  body[data-state="submitted"] .jar-seal-crack,
+  body[data-state="step3"] .jar-seal-crack{
+    opacity:1; animation:crack .6s ease forwards;
+  }
+  @keyframes crack{ to{ stroke-dashoffset:0; } }
+
+  /* ---------- paper form ---------- */
+  .paper-zone{
+    width:100%;
+    max-width:520px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  .paper{
+    width:100%;
+    background:
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.02) 0 2px, transparent 2px 26px),
+      var(--paper);
+    color:#2c2314;
+    border-radius:4px;
+    padding:clamp(16px,3vw,22px);
+    box-shadow:0 12px 30px rgba(0,0,0,0.45), inset 0 0 0 1px var(--paper-shadow);
+    position:relative;
+    transform-origin:center;
+  }
+  .paper::before{
+    content:"已知碎片";
+    position:absolute; top:-13px; left:18px;
+    background:var(--ember);
+    color:#fff;
+    font-size:.78rem;
+    font-weight:700;
+    padding:3px 12px;
+    border-radius:3px;
+    letter-spacing:.08em;
+    box-shadow:0 4px 10px rgba(0,0,0,0.35);
+  }
+  .paper-lines{
+    width:100%;
+    min-height:96px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:16px;
+    padding:6px 2px;
+  }
+  .paper-lines .rule{
+    width:100%;
+    height:1px;
+    background:rgba(44,35,20,0.18);
+  }
+  .paper-hint{
+    text-align:center;
+    color:#8a7c5a;
+    font-size:.92rem;
+    letter-spacing:.03em;
+    margin-top:2px;
+  }
+
+  .drop-btn{
+    align-self:center;
+    background:linear-gradient(180deg, var(--jar-amber-soft), var(--jar-amber));
+    color:#241505;
+    border:none;
+    padding:14px 40px;
+    font-size:1.05rem;
+    font-weight:700;
+    letter-spacing:.06em;
+    border-radius:30px;
+    cursor:pointer;
+    box-shadow:0 8px 22px rgba(217,138,61,0.35);
+    transition:transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+  }
+  .drop-btn:hover{transform:translateY(-2px); box-shadow:0 12px 28px rgba(217,138,61,0.5);}
+  .drop-btn:disabled{opacity:0.4; cursor:not-allowed; transform:none;}
+
+  /* paper falling animation */
+  .paper-zone.dropping .paper{
+    animation:fall-into-jar 2.2s cubic-bezier(.55,-0.1,.7,.35) forwards;
+  }
+  @keyframes fall-into-jar{
+    0%{transform:translateY(0) scale(1) rotate(0deg); opacity:1;}
+    45%{transform:translateY(30px) scale(.8) rotate(6deg); opacity:1;}
+    75%{transform:translateY(70px) scale(.45) rotate(18deg); opacity:.85;}
+    100%{transform:translateY(130px) scale(.05) rotate(35deg); opacity:0;}
+  }
+  .paper-zone.dropping .drop-btn{opacity:0; pointer-events:none;}
+
+  .paper-zone.hidden-zone{display:none;}
+
+  /* ---------- unlock flash ---------- */
+  .unlock-flash{
+    position:fixed; inset:0; background:var(--jar-amber-soft);
+    opacity:0; pointer-events:none; z-index:5;
+  }
+  .unlock-flash.fire{animation:flash .55s ease;}
+  @keyframes flash{
+    0%{opacity:0;} 15%{opacity:.85;} 100%{opacity:0;}
+  }
+
+  .seal-text{
+    text-align:center;
+    font-family:'Zhi Mang Xing',cursive;
+    font-size:clamp(1.3rem,3.6vw,1.9rem);
+    color:var(--ember);
+    text-shadow:0 0 18px rgba(255,90,77,0.6);
+    opacity:0;
+    transform:translateY(8px);
+    transition:opacity .5s ease .5s, transform .5s ease .5s;
+  }
+  body[data-state="submitted"] .seal-text,
+  body[data-state="step3"] .seal-text{opacity:1; transform:translateY(0);}
+
+  /* ---------- QR reveal ---------- */
+  .qr-zone{
+    width:100%;
+    max-width:520px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:16px;
+    opacity:0;
+    transform:translateY(18px) scale(.97);
+    max-height:0;
+    overflow:hidden;
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  body[data-state="submitted"] .qr-zone,
+  body[data-state="step3"] .qr-zone{
+    opacity:1; transform:translateY(0) scale(1); max-height:900px;
+  }
+  .qr-card{
+    background:#fff;
+    padding:clamp(14px,3vw,20px);
+    border-radius:14px;
+    box-shadow:0 0 0 1px var(--jar-amber), 0 16px 40px rgba(0,0,0,0.5);
+  }
+  .qr-card img{
+    display:block;
+    width:clamp(180px,42vw,300px);
+    height:auto;
+  }
+  .qr-caption{
+    text-align:center;
+    color:var(--muted);
+    font-size:.95rem;
+    line-height:1.7;
+  }
+  .qr-caption .k{color:var(--spirit-cyan);}
+
+  .complete-btn{
+    background:transparent;
+    border:2px solid var(--spirit-cyan);
+    color:var(--spirit-cyan);
+    padding:11px 30px;
+    border-radius:24px;
+    font-weight:700;
+    letter-spacing:.05em;
+    cursor:pointer;
+    transition:all .25s ease;
+  }
+  .complete-btn:hover{background:var(--spirit-cyan); color:#062226; box-shadow:0 0 20px rgba(95,224,230,.5);}
+
+  body[data-state="step3"] .qr-card,
+  body[data-state="step3"] .complete-btn{display:none;}
+  .equip-msg{
+    display:none;
+    text-align:center;
+    font-family:'Noto Serif TC',serif;
+    font-weight:700;
+    font-size:clamp(1.1rem,3vw,1.5rem);
+    color:var(--jar-amber-soft);
+    line-height:1.8;
+  }
+  body[data-state="step3"] .equip-msg{display:block;}
+
+  /* ---------- footer steps ---------- */
+  footer.steps{
+    position:sticky; bottom:0; left:0; right:0;
+    width:100%;
+    background:linear-gradient(0deg, var(--ink) 60%, rgba(11,13,16,0.4));
+    border-top:1px solid var(--line);
+    padding:clamp(10px,2vh,16px) clamp(8px,3vw,20px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:clamp(6px,2vw,16px);
+    z-index:3;
+  }
+  .step{
+    display:flex; align-items:center; gap:8px;
+    font-size:clamp(.78rem,2.2vw,.98rem);
+    color:var(--muted);
+    font-weight:700;
+    letter-spacing:.03em;
+    white-space:nowrap;
+    transition:color .3s ease;
+  }
+  .step .dot{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--muted);
+    box-shadow:none;
+    transition:all .3s ease;
+    flex:none;
+  }
+  .step.active{color:var(--jar-amber-soft);}
+  .step.active .dot{background:var(--jar-amber-soft); box-shadow:0 0 10px var(--jar-amber-soft);}
+  .step.done{color:var(--spirit-cyan);}
+  .step.done .dot{background:var(--spirit-cyan); box-shadow:0 0 8px var(--spirit-cyan);}
+  .arrow{color:var(--line); font-size:.85rem;}
+
+  @media (max-width:600px){
+    .step span.label{display:inline;}
+    footer.steps{gap:6px;}
+  }
+</style>
+</head>
+<body data-state="writing">
+
+<div class="ember-field" id="emberField"></div>
+<div class="unlock-flash" id="unlockFlash"></div>
+
+<div id="stage">
+  <header class="top">
+    <div class="eyebrow">封印即將解除</div>
+    <h1 class="title">2026<span class="accent">貍想教育節</span>｜首次登入</h1>
+  </header>
+
+  <main>
+    <div class="narration">
+      <div class="story-zh" id="textZh"></div>
+    </div>
+
+    <div class="jar-wrap">
+      <div class="jar-glow"></div>
+      <svg class="jar" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="100" cy="205" rx="58" ry="10" fill="rgba(0,0,0,0.35)"/>
+        <path d="M70 60 L66 55 L66 30 Q66 20 76 20 L124 20 Q134 20 134 30 L134 55 L130 60 Z"
+              fill="#5a3a1c" stroke="#3a2410" stroke-width="2"/>
+        <rect x="74" y="18" width="52" height="10" rx="4" fill="#3a2410"/>
+        <path d="M60 62 Q40 90 42 130 Q44 185 100 195 Q156 185 158 130 Q160 90 140 62 Z"
+              fill="url(#jarGrad)" stroke="#8a5a20" stroke-width="3"/>
+        <defs>
+          <linearGradient id="jarGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#3a2b12" stop-opacity="0.55"/>
+            <stop offset="55%" stop-color="#7a4d1c" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#f0b168" stop-opacity="0.65"/>
+          </linearGradient>
+        </defs>
+        <path class="jar-seal-crack" d="M75 90 L95 100 L85 115 L110 125 L95 145 L120 150"/>
+        <ellipse cx="100" cy="63" rx="40" ry="8" fill="#000" opacity="0.25"/>
+      </svg>
+    </div>
+
+    <div class="seal-text" id="sealText">✧ 數位封印　已解除 ✧</div>
+
+    <div class="paper-zone" id="paperZone">
+      <div class="paper">
+        <div class="paper-lines">
+          <div class="rule"></div>
+          <div class="rule"></div>
+          <div class="rule"></div>
+        </div>
+        <div class="paper-hint">在紙條上寫下你的已知碎片，準備好後投入甕中</div>
+      </div>
+      <button class="drop-btn" id="dropBtn">投入甕中，交出已知</button>
+    </div>
+
+    <div class="qr-zone" id="qrZone">
+      <div class="qr-card">
+        <img src="https://drive.google.com/thumbnail?id=1teLIaFWdf9A3iRK_7j2ev9zYUwEncRZs&sz=w1000" alt="登入 QRCode">
+      </div>
+      <div class="qr-caption">你的已知碎片已沉入甕底。<br>掃描 <span class="k">QRCode</span>，完成身份登出程序。</div>
+      <button class="complete-btn" id="completeBtn">我已掃描完成</button>
+      <div class="equip-msg">身份已登出，沙盒通道全開。<br>請至報到處，領取你的探索裝備。</div>
+    </div>
+  </main>
+
+  <footer class="steps">
+    <div class="step active" id="step1"><span class="dot"></span><span class="label">交出已知</span></div>
+    <span class="arrow">▸▸▸</span>
+    <div class="step" id="step2"><span class="dot"></span><span class="label">掃 QRCode</span></div>
+    <span class="arrow">▸▸▸</span>
+    <div class="step" id="step3"><span class="dot"></span><span class="label">領取裝備</span></div>
+  </footer>
+</div>
+
+<script>
+  const fullText = "我是這裡的甕靈守門人。歡迎來到西門町沙盒。\n請交出你從外面的世界（學校／辦公室……）帶來的既定觀念、\n或平常在教育與家庭中最沉重的已知（身份負擔），\n把它寫在這張『已知碎片』上，投入甕中——\n你體內的數位封印便會解除，正式登出日常身份！";
+
+  const zhEl = document.getElementById('textZh');
+  function typewriter(el, text, speed){
+    el.textContent = "";
+    let i = 0;
+    (function tick(){
+      if(i <= text.length){
+        el.textContent = text.slice(0, i);
+        i++;
+        setTimeout(tick, speed);
+      }
+    })();
+  }
+  typewriter(zhEl, fullText, 55);
+
+  // ember particles
+  const field = document.getElementById('emberField');
+  for(let i=0;i<16;i++){
+    const e = document.createElement('div');
+    e.className = 'ember';
+    const size = 3 + Math.random()*7;
+    e.style.width = size+'px';
+    e.style.height = size+'px';
+    e.style.left = (Math.random()*100)+'%';
+    e.style.setProperty('--drift', (Math.random()*60-30)+'px');
+    e.style.animationDuration = (7 + Math.random()*8)+'s';
+    e.style.animationDelay = (Math.random()*10)+'s';
+    field.appendChild(e);
+  }
+
+  const dropBtn = document.getElementById('dropBtn');
+  const paperZone = document.getElementById('paperZone');
+  const qrZone = document.getElementById('qrZone');
+  const unlockFlash = document.getElementById('unlockFlash');
+  const body = document.body;
+
+  const step1 = document.getElementById('step1');
+  const step2 = document.getElementById('step2');
+  const step3 = document.getElementById('step3');
+  const completeBtn = document.getElementById('completeBtn');
+
+  const DROP_ANIM_MS = 2200;   // matches fall-into-jar animation duration
+  const PAUSE_AFTER_DROP_MS = 1600; // extra hush before the seal breaks / QR appears
+
+  dropBtn.addEventListener('click', () => {
+    dropBtn.disabled = true;
+    paperZone.classList.add('dropping');
+    setTimeout(() => {
+      paperZone.classList.add('hidden-zone');
+      setTimeout(() => {
+        body.setAttribute('data-state', 'submitted');
+        unlockFlash.classList.add('fire');
+        step1.classList.remove('active');
+        step1.classList.add('done');
+        step2.classList.add('active');
+      }, PAUSE_AFTER_DROP_MS);
+    }, DROP_ANIM_MS);
+  });
+
+  completeBtn.addEventListener('click', () => {
+    body.setAttribute('data-state', 'step3');
+    step2.classList.remove('active');
+    step2.classList.add('done');
+    step3.classList.add('active');
+  });
+</script>
+
+</body>
+</html>
