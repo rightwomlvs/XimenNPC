@@ -99,6 +99,23 @@
   }
 
   /* ---------- narration ---------- */
+  .narration-row{
+    width:100%;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    gap:clamp(16px,4vw,36px);
+    max-width:820px;
+  }
+  .npc-img{
+    flex:none;
+    width:clamp(110px,22vw,190px);
+    height:auto;
+    border-radius:10px;
+    box-shadow:0 10px 28px rgba(0,0,0,0.5), 0 0 0 1px var(--line);
+    object-fit:contain;
+  }
   .narration{
     width:100%;
     text-align:center;
@@ -112,6 +129,11 @@
     white-space:pre-wrap;
   }
   .story-zh .k{color:var(--jar-amber-soft); font-weight:700;}
+
+  @media (max-width:640px){
+    .narration-row{flex-direction:column;}
+    .npc-img{width:clamp(120px,45vw,180px);}
+  }
 
   /* ---------- jar ---------- */
   .jar-wrap{
@@ -355,13 +377,73 @@
   .step.done .dot{background:var(--spirit-cyan); box-shadow:0 0 8px var(--spirit-cyan);}
   .arrow{color:var(--line); font-size:.85rem;}
 
+  /* ---------- music toggle ---------- */
+  #music-toggle{
+    position:absolute;
+    right:0;
+    top:0;
+    background:transparent;
+    border:1px solid var(--jar-amber);
+    color:var(--jar-amber-soft);
+    padding:6px 14px;
+    border-radius:20px;
+    cursor:pointer;
+    font-size:.82rem;
+    font-weight:700;
+    letter-spacing:.02em;
+    transition:all .3s ease;
+  }
+  #music-toggle:hover{background:var(--jar-amber); color:#241505;}
+  header.top{position:relative;}
+
+  /* ---------- refresh fab ---------- */
+  #refresh-fab{
+    position:fixed;
+    right:clamp(14px,3vw,26px);
+    bottom:clamp(84px,11vh,112px);
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    border:1px solid var(--jar-amber);
+    background:var(--ink-2);
+    color:var(--jar-amber-soft);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    box-shadow:0 8px 20px rgba(0,0,0,0.5), 0 0 14px rgba(217,138,61,0.25);
+    z-index:20;
+    transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+  }
+  #refresh-fab svg{width:24px; height:24px;}
+  #refresh-fab:hover{
+    transform:rotate(90deg);
+    background:var(--jar-amber);
+    color:#241505;
+    box-shadow:0 10px 26px rgba(0,0,0,0.55), 0 0 20px rgba(217,138,61,0.45);
+  }
+  #refresh-fab:active{transform:rotate(180deg) scale(.92);}
+
   @media (max-width:600px){
     .step span.label{display:inline;}
     footer.steps{gap:6px;}
   }
+
+  @media (max-width:600px){
+    #music-toggle{
+      position:static;
+      display:inline-block;
+      margin-top:8px;
+    }
+    header.top{display:flex; flex-direction:column; align-items:center;}
+  }
 </style>
 </head>
 <body data-state="writing">
+
+<audio id="bgm" loop preload="auto">
+  <source src="https://raw.githubusercontent.com/rightwomlvs/XimenNPC/main/Last_Call_at_the_Bando.mp3" type="audio/mpeg">
+</audio>
 
 <div class="ember-field" id="emberField"></div>
 <div class="unlock-flash" id="unlockFlash"></div>
@@ -370,11 +452,15 @@
   <header class="top">
     <div class="eyebrow">封印即將解除</div>
     <h1 class="title">2026<span class="accent">貍想教育節</span>｜首次登入</h1>
+    <button id="music-toggle" onclick="toggleMusic()">🔇 BGM：關閉</button>
   </header>
 
   <main>
-    <div class="narration">
-      <div class="story-zh" id="textZh"></div>
+    <div class="narration-row">
+      <img class="npc-img" src="https://drive.google.com/thumbnail?id=1UGDI2ozun1Vc2TUBD3kaiRsYiR9AJy27&sz=w1000" alt="茶樓掌櫃">
+      <div class="narration">
+        <div class="story-zh" id="textZh"></div>
+      </div>
     </div>
 
     <div class="jar-wrap">
@@ -418,7 +504,7 @@
       </div>
       <div class="qr-caption">你的已知碎片已沉入甕底。<br>掃描 <span class="k">QRCode</span>，完成身份登出程序。</div>
       <button class="complete-btn" id="completeBtn">我已掃描完成</button>
-      <div class="equip-msg">身份已登出，沙盒通道全開。<br>請至報到處，領取你的探索裝備。</div>
+      <div class="equip-msg">身份已登出，沙盒通道全開。<br>請向NPC領取你的探索裝備。</div>
     </div>
   </main>
 
@@ -430,6 +516,14 @@
     <div class="step" id="step3"><span class="dot"></span><span class="label">領取裝備</span></div>
   </footer>
 </div>
+
+<button id="refresh-fab" onclick="location.reload()" aria-label="重新整理頁面" title="重新整理頁面">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M23 4v6h-6"/>
+    <path d="M1 20v-6h6"/>
+    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+  </svg>
+</button>
 
 <script>
   const fullText = "我是這裡的甕靈守門人。歡迎來到西門町沙盒。\n請交出你從外面的世界（學校／辦公室……）帶來的既定觀念、\n或平常在教育與家庭中最沉重的已知（身份負擔），\n把它寫在這張『已知碎片』上，投入甕中——\n你體內的數位封印便會解除，正式登出日常身份！";
@@ -448,6 +542,9 @@
   }
   typewriter(zhEl, fullText, 55);
 
+  window.addEventListener('load', () => tryAutoStartMusic());
+  document.addEventListener('click', () => tryAutoStartMusic(), { once: true });
+
   // ember particles
   const field = document.getElementById('emberField');
   for(let i=0;i<16;i++){
@@ -461,6 +558,48 @@
     e.style.animationDuration = (7 + Math.random()*8)+'s';
     e.style.animationDelay = (Math.random()*10)+'s';
     field.appendChild(e);
+  }
+
+  const bgm = document.getElementById('bgm');
+  const musicToggle = document.getElementById('music-toggle');
+  let musicStarted = false;
+  let musicErrored = false;
+
+  bgm.addEventListener('error', () => {
+    musicErrored = true;
+    musicToggle.innerText = '❌ 音訊載入失敗';
+    musicToggle.style.borderColor = '#ff5a4d';
+    musicToggle.style.color = '#ff5a4d';
+  });
+
+  function toggleMusic(){
+    if(musicErrored){
+      alert('音樂載入失敗，請確認音訊連結或網路狀態。');
+      return;
+    }
+    if(bgm.paused){
+      bgm.play().then(() => {
+        musicStarted = true;
+        musicToggle.innerText = '🎵 BGM：開啟';
+        musicToggle.style.borderColor = 'var(--spirit-cyan)';
+        musicToggle.style.color = 'var(--spirit-cyan)';
+      }).catch(()=>{});
+    } else {
+      bgm.pause();
+      musicToggle.innerText = '🔇 BGM：關閉';
+      musicToggle.style.borderColor = 'var(--jar-amber)';
+      musicToggle.style.color = 'var(--jar-amber-soft)';
+    }
+  }
+
+  function tryAutoStartMusic(){
+    if(musicStarted || musicErrored) return;
+    bgm.play().then(() => {
+      musicStarted = true;
+      musicToggle.innerText = '🎵 BGM：開啟';
+      musicToggle.style.borderColor = 'var(--spirit-cyan)';
+      musicToggle.style.color = 'var(--spirit-cyan)';
+    }).catch(() => { /* autoplay blocked until user interacts */ });
   }
 
   const dropBtn = document.getElementById('dropBtn');
@@ -478,6 +617,7 @@
   const PAUSE_AFTER_DROP_MS = 1600; // extra hush before the seal breaks / QR appears
 
   dropBtn.addEventListener('click', () => {
+    tryAutoStartMusic();
     dropBtn.disabled = true;
     paperZone.classList.add('dropping');
     setTimeout(() => {
