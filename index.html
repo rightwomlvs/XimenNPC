@@ -99,23 +99,6 @@
   }
 
   /* ---------- narration ---------- */
-  .narration-row{
-    width:100%;
-    display:flex;
-    flex-direction:row;
-    align-items:center;
-    justify-content:center;
-    gap:clamp(16px,4vw,36px);
-    max-width:820px;
-  }
-  .npc-img{
-    flex:none;
-    width:clamp(110px,22vw,190px);
-    height:auto;
-    border-radius:10px;
-    box-shadow:0 10px 28px rgba(0,0,0,0.5), 0 0 0 1px var(--line);
-    object-fit:contain;
-  }
   .narration{
     width:100%;
     text-align:center;
@@ -130,9 +113,28 @@
   }
   .story-zh .k{color:var(--jar-amber-soft); font-weight:700;}
 
+  /* ---------- jar scene (npc + urn) ---------- */
+  .jar-scene{
+    width:100%;
+    max-width:520px;
+    display:flex;
+    flex-direction:row;
+    align-items:flex-end;
+    justify-content:center;
+    gap:clamp(10px,3vw,26px);
+  }
+  .npc-img{
+    flex:none;
+    width:clamp(110px,24vw,190px);
+    height:auto;
+    border-radius:10px;
+    box-shadow:0 10px 28px rgba(0,0,0,0.5), 0 0 0 1px var(--line);
+    object-fit:contain;
+  }
+
   @media (max-width:640px){
-    .narration-row{flex-direction:column;}
-    .npc-img{width:clamp(120px,45vw,180px);}
+    .jar-scene{gap:8px;}
+    .npc-img{width:clamp(96px,30vw,150px);}
   }
 
   /* ---------- jar ---------- */
@@ -456,32 +458,32 @@
   </header>
 
   <main>
-    <div class="narration-row">
-      <img class="npc-img" src="https://drive.google.com/thumbnail?id=1UGDI2ozun1Vc2TUBD3kaiRsYiR9AJy27&sz=w1000" alt="茶樓掌櫃">
-      <div class="narration">
-        <div class="story-zh" id="textZh"></div>
-      </div>
+    <div class="narration">
+      <div class="story-zh" id="textZh"></div>
     </div>
 
-    <div class="jar-wrap">
-      <div class="jar-glow"></div>
-      <svg class="jar" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="100" cy="205" rx="58" ry="10" fill="rgba(0,0,0,0.35)"/>
-        <path d="M70 60 L66 55 L66 30 Q66 20 76 20 L124 20 Q134 20 134 30 L134 55 L130 60 Z"
-              fill="#5a3a1c" stroke="#3a2410" stroke-width="2"/>
-        <rect x="74" y="18" width="52" height="10" rx="4" fill="#3a2410"/>
-        <path d="M60 62 Q40 90 42 130 Q44 185 100 195 Q156 185 158 130 Q160 90 140 62 Z"
-              fill="url(#jarGrad)" stroke="#8a5a20" stroke-width="3"/>
-        <defs>
-          <linearGradient id="jarGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#3a2b12" stop-opacity="0.55"/>
-            <stop offset="55%" stop-color="#7a4d1c" stop-opacity="0.55"/>
-            <stop offset="100%" stop-color="#f0b168" stop-opacity="0.65"/>
-          </linearGradient>
-        </defs>
-        <path class="jar-seal-crack" d="M75 90 L95 100 L85 115 L110 125 L95 145 L120 150"/>
-        <ellipse cx="100" cy="63" rx="40" ry="8" fill="#000" opacity="0.25"/>
-      </svg>
+    <div class="jar-scene">
+      <img class="npc-img" src="https://raw.githubusercontent.com/rightwomlvs/XimenNPC/main/npc.png" alt="茶樓掌櫃">
+      <div class="jar-wrap">
+        <div class="jar-glow"></div>
+        <svg class="jar" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="100" cy="205" rx="58" ry="10" fill="rgba(0,0,0,0.35)"/>
+          <path d="M70 60 L66 55 L66 30 Q66 20 76 20 L124 20 Q134 20 134 30 L134 55 L130 60 Z"
+                fill="#5a3a1c" stroke="#3a2410" stroke-width="2"/>
+          <rect x="74" y="18" width="52" height="10" rx="4" fill="#3a2410"/>
+          <path d="M60 62 Q40 90 42 130 Q44 185 100 195 Q156 185 158 130 Q160 90 140 62 Z"
+                fill="url(#jarGrad)" stroke="#8a5a20" stroke-width="3"/>
+          <defs>
+            <linearGradient id="jarGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#3a2b12" stop-opacity="0.55"/>
+              <stop offset="55%" stop-color="#7a4d1c" stop-opacity="0.55"/>
+              <stop offset="100%" stop-color="#f0b168" stop-opacity="0.65"/>
+            </linearGradient>
+          </defs>
+          <path class="jar-seal-crack" d="M75 90 L95 100 L85 115 L110 125 L95 145 L120 150"/>
+          <ellipse cx="100" cy="63" rx="40" ry="8" fill="#000" opacity="0.25"/>
+        </svg>
+      </div>
     </div>
 
     <div class="seal-text" id="sealText">✧ 數位封印　已解除 ✧</div>
@@ -504,7 +506,7 @@
       </div>
       <div class="qr-caption">你的已知碎片已沉入甕底。<br>掃描 <span class="k">QRCode</span>，完成身份登出程序。</div>
       <button class="complete-btn" id="completeBtn">我已掃描完成</button>
-      <div class="equip-msg">身份已登出，沙盒通道全開。<br>請向NPC領取你的探索裝備。</div>
+      <div class="equip-msg">身份已登出，沙盒通道全開。<br>請至報到處，領取你的探索裝備。</div>
     </div>
   </main>
 
